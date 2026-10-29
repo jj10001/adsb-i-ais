@@ -33,11 +33,26 @@ Projekt to aplikacja Full-Stack do śledzenia statków powietrznych na żywo wyk
 * Python 3.8 lub nowszy
 * Menedżer pakietów pip
 
+**Wskazówka dla systemów Debian/Ubuntu:**
+Jeśli pracujesz na "czystym" systemie, upewnij się, że posiadasz niezbędne narzędzia systemowe przed przystąpieniem do instalacji pakietów Pythona:
+```bash
+sudo apt update
+sudo apt install python3 python3-venv python3-pip
+```
+
 ### Krok po kroku
 
 1. **Przejdź do katalogu projektu:**
    Upewnij się, że znajdujesz się w głównym katalogu projektu `adsb-i-ais`.
 
+2. **(Zalecane) Utwórz i aktywuj wirtualne środowisko:**
+   Wirtualne środowisko (`venv`) izoluje pakiety instalowane dla tego projektu od reszty systemu. Jeśli chcesz dowiedzieć się więcej, czym są środowiska wirtualne w Pythonie, sprawdź te artykuły:
+   * [Oficjalna dokumentacja Pythona o venv](https://docs.python.org/pl/3/tutorial/venv.html)
+   * [Real Python: Python Virtual Environments: A Primer](https://realpython.com/python-virtual-environments-a-primer/)
+
+   Aby utworzyć i aktywować środowisko, uruchom:
+   ```bash
+   python3 -m venv venv
 2. **(Opcjonalnie, ale zalecane) Utwórz i aktywuj wirtualne środowisko:**
    ```bash
    python -m venv venv
