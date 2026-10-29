@@ -16,6 +16,7 @@ function initMap() {
             (position) => {
                 userLat = position.coords.latitude;
                 userLon = position.coords.longitude;
+                updateLocationInputs(userLat, userLon);
 
                 map.setView([userLat, userLon], 9);
 
@@ -36,7 +37,18 @@ function initMap() {
                 alert("Could not get your location. Defaulting to London.");
                 userLat = 51.5074;
                 userLon = -0.1278;
+                updateLocationInputs(userLat, userLon);
+
                 map.setView([userLat, userLon], 9);
+                userMarker = L.marker([userLat, userLon], {
+                    icon: L.divIcon({
+                        className: 'user-marker',
+                        html: '📍',
+                        iconSize: [24, 24],
+                        iconAnchor: [12, 24]
+                    })
+                }).addTo(map).bindPopup("Your Location");
+
                 fetchData();
                 setInterval(fetchData, 5000);
             }
@@ -46,9 +58,34 @@ function initMap() {
     }
 }
 
+function updateLocationInputs(lat, lon) {
+    document.getElementById('lat-input').value = lat.toFixed(4);
+    document.getElementById('lon-input').value = lon.toFixed(4);
+}
+
 // Fetch aircraft data
 async function fetchData() {
-    if (!userLat || !userLon) return;
+    const latInput = document.getElementById('lat-input').value;
+    const lonInput = document.getElementById('lon-input').value;
+
+    if (!latInput || !lonInput) return;
+
+    userLat = parseFloat(latInput);
+    userLon = parseFloat(lonInput);
+
+    // Update user marker
+    if (userMarker) {
+        userMarker.setLatLng([userLat, userLon]);
+    } else {
+        userMarker = L.marker([userLat, userLon], {
+            icon: L.divIcon({
+                className: 'user-marker',
+                html: '📍',
+                iconSize: [24, 24],
+                iconAnchor: [12, 24]
+            })
+        }).addTo(map).bindPopup("Your Location");
+    }
 
     const radius = document.getElementById('radius').value || 100;
 
@@ -137,6 +174,59 @@ function updateUI(data) {
 }
 
 document.getElementById('update-btn').addEventListener('click', fetchData);
+
+// Autocomplete and city search logic
+let searchTimeout;
+const cityInput = document.getElementById('city-input');
+const cityDropdown = document.getElementById('city-dropdown');
+
+cityInput.addEventListener('input', (e) => {
+    clearTimeout(searchTimeout);
+    const query = e.target.value.trim();
+
+    if (query.length < 3) {
+        cityDropdown.style.display = 'none';
+        return;
+    }
+
+    searchTimeout = setTimeout(async () => {
+        try {
+            const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&email=contact@adsb-tracker.local`);
+            const data = await response.json();
+
+            cityDropdown.innerHTML = '';
+            if (data.length > 0) {
+                data.forEach(place => {
+                    const li = document.createElement('li');
+                    li.textContent = place.display_name;
+                    li.addEventListener('click', () => {
+                        cityInput.value = place.display_name;
+                        const newLat = parseFloat(place.lat);
+                        const newLon = parseFloat(place.lon);
+                        updateLocationInputs(newLat, newLon);
+                        cityDropdown.style.display = 'none';
+                        map.setView([newLat, newLon]);
+                        fetchData();
+                    });
+                    cityDropdown.appendChild(li);
+                });
+                cityDropdown.style.display = 'block';
+            } else {
+                cityDropdown.style.display = 'none';
+            }
+        } catch (error) {
+            console.error("Error fetching city data:", error);
+            cityDropdown.style.display = 'none';
+        }
+    }, 500); // 500ms debounce
+});
+
+// Hide dropdown when clicking outside
+document.addEventListener('click', (e) => {
+    if (e.target !== cityInput && e.target !== cityDropdown) {
+        cityDropdown.style.display = 'none';
+    }
+});
 
 // Start
 document.addEventListener('DOMContentLoaded', initMap);

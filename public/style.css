@@ -27,19 +27,24 @@ body {
     color: #333;
 }
 
-.controls {
+.location-controls {
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.control-row {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.controls input {
-    width: 80px;
+.control-row input {
     padding: 5px;
 }
 
-.controls button {
+.control-row button {
     padding: 5px 10px;
     background: #007bff;
     color: white;
@@ -48,8 +53,18 @@ body {
     border-radius: 3px;
 }
 
-.controls button:hover {
+.control-row button:hover {
     background: #0056b3;
+}
+
+.dropdown-list li {
+    padding: 5px 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.dropdown-list li:hover {
+    background: #f0f0f0;
 }
 
 .stats {
