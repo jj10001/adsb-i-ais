@@ -53,9 +53,6 @@ sudo apt install python3 python3-venv python3-pip
    Aby utworzyć i aktywować środowisko, uruchom:
    ```bash
    python3 -m venv venv
-2. **(Opcjonalnie, ale zalecane) Utwórz i aktywuj wirtualne środowisko:**
-   ```bash
-   python -m venv venv
 
    # Aktywacja w systemie Windows:
    venv\Scripts\activate
@@ -111,6 +108,20 @@ http://localhost:8000/api/flights?lat=52.23&lon=21.01&radius=100
 5. **Otwórz aplikację w przeglądarce:**
    Po pomyślnym uruchomieniu, interfejs mapy oraz serwer będą dostępne pod adresem:
    [http://localhost:8000](http://localhost:8000)
+
+## API Endpoint Reference
+
+Backend udostępnia jeden punkt końcowy (endpoint) REST do pobierania znormalizowanych danych o lotach:
+
+- **`GET /api/flights`**
+  - `lat` (float): Szerokość geograficzna punktu centralnego (wymagane)
+  - `lon` (float): Długość geograficzna punktu centralnego (wymagane)
+  - `radius` (float): Promień w kilometrach (opcjonalne, domyślnie 100km)
+
+Przykład:
+```
+http://localhost:8000/api/flights?lat=52.23&lon=21.01&radius=100
+```
 
 ## Dokumentacja
 Szczegóły dotyczące założeń, celów oraz wybranych rozwiązań architektonicznych znajdują się w dokumencie ADR (Architecture Decision Record) zlokalizowanym w katalogu `docs/`.
