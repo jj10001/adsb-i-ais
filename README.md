@@ -34,10 +34,10 @@ Projekt to aplikacja Full-Stack do śledzenia statków powietrznych na żywo wyk
 * Menedżer pakietów pip
 
 **Wskazówka dla systemów Debian/Ubuntu:**
-Jeśli pracujesz na "czystym" systemie, upewnij się, że posiadasz niezbędne narzędzia systemowe przed przystąpieniem do instalacji pakietów Pythona:
+Jeśli pracujesz na "czystym" systemie, upewnij się, że posiadasz niezbędne narzędzia systemowe przed przystąpieniem do instalacji pakietów Pythona. Zakładając uruchomienie na całkowicie świeżym Debianie, niezbędne będą również narzędzia takie jak `git` do pobrania repozytorium:
 ```bash
 sudo apt update
-sudo apt install python3 python3-venv python3-pip
+sudo apt install git python3 python3-venv python3-pip
 ```
 
 ### Krok po kroku
